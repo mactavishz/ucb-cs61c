@@ -30,13 +30,55 @@ static void set_board_at(game_state_t* state, int x, int y, char ch) {
 
 /* Task 1 */
 game_state_t* create_default_state() {
-  // TODO: Implement this function.
-  return NULL;
+  game_state_t *state = malloc(sizeof(game_state_t));
+  int rows = 10;
+  int cols = 14;
+  // x and y are the reverse of rows and cols
+  state->x_size = cols;
+  state->y_size = rows;
+  // allocate rows
+  state->board = malloc(sizeof(char*) * rows);
+  unsigned i, j;
+  for (i = 0; i < rows; i++) {
+    // allocate cols
+    state->board[i] = malloc(sizeof(char) * cols);
+  }
+  for (i = 0; i < rows; i++) {
+    for (j = 0; j < cols; j++) {
+      state->board[i][j] = ' ';
+    }
+  }
+  // init board
+  strncpy(state->board[0], "##############", cols);
+  strncpy(state->board[rows - 1], "##############", cols);
+  for (i = 1; i < rows - 1; i++) {
+    state->board[i][0] = '#';
+    state->board[i][cols - 1] = '#';
+  }
+  // init fruit
+  state->board[2][9] = '*';
+  // init snake
+  state->board[4][4] = 'd';
+  state->board[4][5] = '>';
+  state->num_snakes = 1; 
+  state->snakes = malloc(sizeof(snake_t));
+  state->snakes[0].head_x = 5;
+  state->snakes[0].head_y = 4; 
+  state->snakes[0].tail_x = 4;
+  state->snakes[0].tail_y = 4;
+  state->snakes[0].live = true;
+  return state;
 }
 
 /* Task 2 */
 void free_state(game_state_t* state) {
-  // TODO: Implement this function.
+  unsigned i;
+  for (i = 0; i < state->y_size; i++) {
+    free(state->board[i]);
+  }
+  free(state->snakes);
+  free(state->board);
+  free(state);
   return;
 }
 
