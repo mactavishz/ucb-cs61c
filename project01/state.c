@@ -84,7 +84,15 @@ void free_state(game_state_t* state) {
 
 /* Task 3 */
 void print_board(game_state_t* state, FILE* fp) {
-  // TODO: Implement this function.
+  int rows = state->y_size;
+  int cols = state->x_size;
+  unsigned i, j;
+  for (i = 0; i < rows; i++) {
+    for (j = 0; j < cols; j++) {
+      fprintf(fp, "%c", state->board[i][j]);
+    }
+    fprintf(fp, "\n");
+  }
   return;
 }
 
