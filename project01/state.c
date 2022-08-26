@@ -234,9 +234,44 @@ void update_state(game_state_t* state, int (*add_food)(game_state_t* state)) {
 }
 
 /* Task 5 */
+/* This function doesn't check the validity of the content */
 game_state_t* load_board(char* filename) {
-  // TODO: Implement this function.
-  return NULL;
+  FILE* f = fopen(filename, "r");
+  game_state_t *state = malloc(sizeof(game_state_t));
+  int count = 0, default_cols = 16, cols = 0, rows = 0;
+  int ch;
+  char *buf = malloc(sizeof(char) * default_cols);
+  while ((ch = fgetc(f)) != '\n') {
+    if (cols >= default_cols) {
+      default_cols *= 2;
+      buf = realloc(buf, sizeof(char) * default_cols);
+    }
+    buf[cols] = ch;
+    cols++;
+  }
+  rows = 1;
+  while ((ch = fgetc(f)) != EOF) {
+    if (ch == '\n') {
+      rows++;
+    }
+  }
+  free(buf);
+  // reset file position indicator
+  rewind(f);
+  int i, j;
+  state->board = malloc(rows * sizeof(char *));
+  state->x_size = cols;
+  state->y_size = rows;
+  for (i = 0; i < rows; i++) {
+    state->board[i] = malloc(cols * sizeof(char));
+    for (j = 0; j < cols; j++) {
+      state->board[i][j] = fgetc(f);
+    }
+    // remove newline character
+    fgetc(f);
+  }
+  fclose(f);
+  return state;
 }
 
 /* Task 6.1 */
