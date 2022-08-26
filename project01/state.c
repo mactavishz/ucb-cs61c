@@ -238,7 +238,7 @@ void update_state(game_state_t* state, int (*add_food)(game_state_t* state)) {
 game_state_t* load_board(char* filename) {
   FILE* f = fopen(filename, "r");
   game_state_t *state = malloc(sizeof(game_state_t));
-  int count = 0, default_cols = 16, cols = 0, rows = 0;
+  int default_cols = 16, cols = 0, rows = 0;
   int ch;
   char *buf = malloc(sizeof(char) * default_cols);
   while ((ch = fgetc(f)) != '\n') {
