@@ -276,12 +276,50 @@ game_state_t* load_board(char* filename) {
 
 /* Task 6.1 */
 static void find_head(game_state_t* state, int snum) {
-  // TODO: Implement this function.
+  snake_t *snake = &state->snakes[snum];
+  int x = snake->tail_x;
+  int y = snake->tail_y;
+  char ch = state->board[y][x];
+  while (true) {
+    int move_y = incr_y(ch);
+    int move_x = incr_x(ch);
+    if ((ch = state->board[y + move_y][x + move_x]) == ' ') {
+      break;
+    }
+    x += move_x;
+    y += move_y;
+  }
+  snake->head_x = x;
+  snake->head_y = y;
   return;
 }
 
 /* Task 6.2 */
 game_state_t* initialize_snakes(game_state_t* state) {
-  // TODO: Implement this function.
-  return NULL;
+  int rows = state->y_size;
+  int cols = state->x_size;
+  int i, j;
+  state->num_snakes = 0;
+  // find the number of snakes
+  for (i = 0; i < rows; i++) {
+    for (j = 0; j < cols; j++) {
+      if (is_tail(state->board[i][j])) {
+        state->num_snakes++;
+      }
+    }
+  }
+
+  state->snakes = malloc(sizeof(snake_t) * state->num_snakes);
+  int snum = 0;
+  for (i = 0; i < rows; i++) {
+    for (j = 0; j < cols; j++) {
+      if (is_tail(state->board[i][j])) {
+        state->snakes[snum].tail_x = j;
+        state->snakes[snum].tail_y = i;
+        find_head(state, snum);
+        snum++;
+      }
+    }
+  }
+  return state;
 }
