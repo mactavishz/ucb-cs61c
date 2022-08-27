@@ -283,7 +283,9 @@ static void find_head(game_state_t* state, int snum) {
   while (true) {
     int move_y = incr_y(ch);
     int move_x = incr_x(ch);
-    if ((ch = state->board[y + move_y][x + move_x]) == ' ') {
+    ch = state->board[y + move_y][x + move_x];
+    // stop until next character on the board is not a snake character
+    if (!is_snake(ch)) {
       break;
     }
     x += move_x;
